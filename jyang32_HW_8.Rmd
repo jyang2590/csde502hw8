@@ -1,0 +1,68 @@
+---
+title: "jyang32_HW_8"
+author: "June Yang"
+date: "3/6/2020"
+output: 
+    html_document:
+        number_sections: true
+        self_contained: true
+        code_folding: hide
+        toc: true
+        toc_float:
+            collapsed: true
+            smooth_scroll: false
+urlcolor: blue      
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+```
+
+## Read data
+```{r}
+usa_death_1x1 <- read.table("Deaths_1x1.txt", skip = 2, header = TRUE, stringsAsFactors = FALSE)
+head(usa_death_1x1,6)
+class(usa_death_1x1$Age)
+usa_death_1x1$Age <- as.integer(usa_death_1x1$Age)
+```
+
+I've chosen the United States as my country of interest. US is a country of "50 states, a federal district, five self-governing terriroris and various possessions" (wikipedia). The country has a population of 327.2 million as of 2018 , and has a gross domestic product of 19.39 trillion USD in 2017 (US Census Bureau). The 2010 census show that 72% of the US population are white. 
+
+Data is from the [Human Mortality Database](https://www.mortality.org). 
+According to the website, data on United Sates come from various sources including decennial population censuses, periodical vital statistics publications, Duke Univeristy (who obtained data from National Center for Health Statistics), ICPSR, as well as CDC. Data table downloaded and used here contains annual US mortality data from 1933 to 2017. It has 9435 observations and has variables year, age, number of female death, number of male death and total death. 
+
+## brief analysis of data
+```{r}
+usa_death_1x1 <- usa_death_1x1 %>% 
+  mutate(sexratio = Male/Female)
+
+head(usa_death_1x1,20)
+mean(usa_death_1x1$sexratio)
+```
+
+## text with embedded data
+On average, male to female death ratio is `r mean(usa_death_1x1$sexratio)`.
+
+## hyperlink
+Data is downloaded from [Human Mortality Database](https://www.mortality.org).
+
+## table
+```{r}
+table(usa_death_1x1$Age)
+```
+
+## plot
+```{r}
+age1 <- usa_death_1x1 %>% filter(Age == 1)
+ggplot(data = age1, aes(x = Year, y = Total)) + 
+    geom_bar(stat = "identity") + 
+    ylab("deaths of children of one year old") + 
+    xlab("year") + 
+  ggtitle("Age one mortality")
+
+
+```
+
+
